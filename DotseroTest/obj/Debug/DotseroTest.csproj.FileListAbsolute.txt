@@ -1,6 +1,6 @@
 D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\bin\Debug\DotseroTest.dll
 D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\bin\Debug\DotseroTest.pdb
-D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\bin\Debug\Dotsero.exe
+D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\bin\Debug\Dotsero.dll
 D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\bin\Debug\Retlang.dll
 D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\bin\Debug\Dotsero.pdb
 D:\home\projects\Akka.NET\Dotsero\Dotsero\DotseroTest\obj\Debug\DotseroTest.csprojResolveAssemblyReference.cache
