@@ -23,6 +23,7 @@ Currently supported:
 5. SupervisorStrategy
    - OneForOneStrategy
    - AllForOneStrategy (not fully implemented)
+6. System Scheduler (timers)
 
 - Requires Retlang: https://code.google.com/p/retlang/
 - Currently seeing approximately 0.5 million messages per second,
@@ -44,5 +45,5 @@ Currently unsupported (big items missing):
    would be the thing to cause the stash to be emptied. The
    good news is that the block is a sleep and will likely
    last only one 1 ms interval.
-5. Scheduling (timers)
+5. Death Watch
 6. Whatever else is not listed above as supported.

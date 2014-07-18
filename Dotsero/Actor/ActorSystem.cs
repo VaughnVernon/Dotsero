@@ -15,6 +15,7 @@
 namespace Dotsero.Actor
 {
     using System;
+    using System.Threading;
 
     /// <summary>
     /// Defines the ActorSystem.
@@ -45,6 +46,11 @@ namespace Dotsero.Actor
         /// Gets and sets (privately) my Name.
         /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets and sets (privately) my Scheduler.
+        /// </summary>
+        public Scheduler Scheduler { get; private set; }
 
         /// <summary>
         /// Gets and set (privately) my StartTime.
@@ -181,8 +187,158 @@ namespace Dotsero.Actor
 
             Name = name;
 
+            Scheduler = new Scheduler();
+
             StartTime = DateTime.Now;
         }
+    }
+
+    /// <summary>
+    /// Defines the system scheduler.
+    /// </summary>
+    public class Scheduler
+    {
+        /// <summary>
+        /// Schedules a recurring timer event.
+        /// </summary>
+        /// <param name="delay">the long number of milliseconds before the event is rasied</param>
+        /// <param name="receiver">the ActorRef of the actor to receive notification</param>
+        /// <param name="message">the object message to send to the receiver when the event occurs</param>
+        /// <returns>Cancellable</returns>
+        public Cancellable Schedule(
+            long initialDelay,
+            long frequency,
+            ActorRef receiver,
+            object message)
+        {
+            if (initialDelay < 0)
+            {
+                throw new NotSupportedException("The initial delay must be zero or greater.");
+            }
+
+            if (frequency < 1)
+            {
+                throw new NotSupportedException("The frequency must be greater than zero.");
+            }
+
+            if (receiver == ActorRef.None || message == null)
+            {
+                throw new NotSupportedException("Must provide a receiver and message.");
+            }
+
+            return new ScheduledTimerEvent(initialDelay, frequency, receiver, message);
+        }
+
+        /// <summary>
+        /// Schedules a single timer event.
+        /// </summary>
+        /// <param name="delay">the long number of milliseconds before the event is rasied</param>
+        /// <param name="receiver">the ActorRef of the actor to receive notification</param>
+        /// <param name="message">the object message to send to the receiver when the event occurs</param>
+        /// <returns>Cancellable</returns>
+        public Cancellable ScheduleOnce(
+            long delay,
+            ActorRef receiver,
+            object message)
+        {
+            if (delay < 1)
+            {
+                throw new NotSupportedException("Delay must be greater than zero.");
+            }
+
+            if (receiver == ActorRef.None || message == null)
+            {
+                throw new NotSupportedException("Must provide a receiver and message.");
+            }
+
+            return new ScheduledTimerEvent(delay, 0, receiver, message);
+        }
+
+        /// <summary>
+        /// Constructs the system Scheduler.
+        /// </summary>
+        internal Scheduler() { }
+    }
+
+    /// <summary>
+    /// Defines a ScheduledTimerEvent used by the system Scheduler.
+    /// </summary>
+    internal class ScheduledTimerEvent : Cancellable
+    {
+        private long frequency;
+        private object message;
+        private ActorRef receiver;
+        private Timer timer;
+
+        public ScheduledTimerEvent(
+            long delay,
+            long frequency,
+            ActorRef receiver,
+            object message)
+        {
+            this.frequency = frequency;
+            this.receiver = receiver;
+            this.message = message;
+
+            timer = new Timer(
+                (TimerCallback)this.OnTimedEvent,
+                null,
+                delay,
+                frequency == 0 ? -1 : frequency);
+        }
+
+        /// <summary>
+        /// Implemented Cancellable Cancel.
+        /// </summary>
+        public void Cancel()
+        {
+            timer.Change(Timeout.Infinite, 0);
+
+            timer.Dispose();
+
+            timer = null;
+        }
+
+        /// <summary>
+        /// Implemented Cancellable Cancelled.
+        /// </summary>
+        public bool Cancelled
+        {
+            get
+            {
+                return timer == null;
+            }
+        }
+
+        /// <summary>
+        /// Called when the timer elapses.
+        /// </summary>
+        /// <param name="stateInfo">the event infor</param>
+        public void OnTimedEvent(object stateInfo)
+        {
+            if (frequency == 0)
+            {
+                Cancel();
+            }
+            
+            receiver.Tell(message);
+        }
+    }
+
+    /// <summary>
+    /// Defines the interface used to cancel some event.
+    /// </summary>
+    public interface Cancellable
+    {
+        /// <summary>
+        /// Cancels the event.
+        /// </summary>
+        void Cancel();
+
+        /// <summary>
+        /// Indicates whether the event has been canceled.
+        /// </summary>
+        bool Cancelled { get; }
     }
 
     /// <summary>
@@ -198,6 +354,10 @@ namespace Dotsero.Actor
         {
         }
 
+        /// <summary>
+        /// Receives a message and logs it.
+        /// </summary>
+        /// <param name="message"></param>
         public void OnReceive(object message)
         {
             Console.Out.WriteLine("Dead Letter: INFO: " + message);

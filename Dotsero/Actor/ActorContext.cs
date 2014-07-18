@@ -162,13 +162,20 @@ namespace Dotsero.Actor
         /// <param name="actor">the ActorRef of the Actor to stop</param>
         public void Stop(ActorRef actor)
         {
-            if (Children.Remove(actor))
+            if (actor == Self)
             {
-                actor.Context.Stop();
+                Parent.Context.Stop(actor);
             }
             else
             {
-                Sweep(actor, new List<ActorRef>(Children));
+                if (Children.Remove(actor))
+                {
+                    actor.Context.Stop();
+                }
+                else
+                {
+                    Sweep(actor, new List<ActorRef>(Children));
+                }
             }
         }
 
