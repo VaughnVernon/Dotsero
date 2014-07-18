@@ -1,0 +1,7 @@
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\bin\Debug\Takka.exe.config
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\bin\Debug\Takka.exe
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\bin\Debug\Takka.pdb
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\bin\Debug\Retlang.dll
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\obj\Debug\Takka.exe
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\obj\Debug\Takka.pdb
+D:\home\projects\Akka.NET\Takka.NET\Takka\Takka\obj\Debug\Takka.csprojResolveAssemblyReference.cache
