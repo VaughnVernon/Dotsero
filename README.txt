@@ -5,6 +5,10 @@ This is a MVP .NET Actor Model toolkit that follows the
 Akka API as closely as possible, but as idomatic C#. It
 is licensed under Apache 2.0.
 
+What's In a Name?
+-----------------
+Dotsero, Colorado: http://en.wikipedia.org/wiki/Dotsero
+
 Currently supported:
 --------------------
 1. ActorSystem
@@ -32,10 +36,13 @@ Currently unsupported (big items missing):
 3. Remoting and Clustering (LocalActorRef/RemoteActorRef)
 4. Creating and stopping actors is currently not asyncrhonous,
    and the ActorKilledException/Stop messages are currently
-   not supported. Further, suspending an actor due to a restart
+   not supported. Further, if a message is delivered to a
+   suspended actor (e.g. due to a restart) the delivery
    currently blocks rather than stashing messages. This is
-   because stashing requires another incoming message to cause
-   the stashed messages to be delivered. A scheduler would be
-   the thing to cause the stash to be emptied.
+   because stashing would require another incoming message
+   to cause the stashed messages to be delivered. A scheduler
+   would be the thing to cause the stash to be emptied. The
+   good news is that the block is a sleep and will likely
+   last only one 1 ms interval.
 5. Scheduling (timers)
 6. Whatever else is not listed above as supported.
