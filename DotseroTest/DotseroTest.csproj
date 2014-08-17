@@ -63,6 +63,7 @@
     <Compile Include="SupervisionStopTests.cs" />
     <Compile Include="ActorSelectionTests.cs" />
     <Compile Include="SchedulerTests.cs" />
+    <Compile Include="ProcessManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dotsero\Dotsero.csproj">
