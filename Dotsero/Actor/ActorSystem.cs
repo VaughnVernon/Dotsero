@@ -90,11 +90,7 @@ namespace Dotsero.Actor
         /// <returns>ActorRef</returns>
         public ActorRef ActorOf(Type actorType, Props props, string name)
         {
-            ActorRef newActor = Context.ActorOf(actorType, props, name);
-
-            newActor.Context.System = this;
-
-            return newActor;
+            return Context.ActorOf(actorType, props, name);
         }
 
         /// <summary>
